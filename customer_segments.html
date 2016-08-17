@@ -526,7 +526,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Make a copy of the DataFrame, using the &#39;drop&#39; function to drop the given feature</span>
@@ -536,6 +536,7 @@ div#notebook {
 
 <span class="kn">from</span> <span class="nn">sklearn.cross_validation</span> <span class="kn">import</span> <span class="n">train_test_split</span>
 <span class="kn">from</span> <span class="nn">sklearn.tree</span> <span class="kn">import</span> <span class="n">DecisionTreeRegressor</span>
+<span class="kn">import</span> <span class="nn">random</span>
 
 <span class="n">new_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;Grocery&#39;</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">new_data</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Grocery&#39;</span><span class="p">],</span> <span class="n">test_size</span> <span class="o">=</span> <span class="mf">0.25</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span> <span class="mi">42</span><span class="p">)</span>
@@ -551,10 +552,18 @@ div#notebook {
         <span class="n">new_data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">feat</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>     
         <span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">new_data</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">feat</span><span class="p">],</span> <span class="n">test_size</span> <span class="o">=</span> <span class="mf">0.25</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span> <span class="n">rd_split</span><span class="p">)</span>
         <span class="n">regressor</span> <span class="o">=</span> <span class="n">DecisionTreeRegressor</span><span class="p">(</span><span class="n">random_state</span> <span class="o">=</span> <span class="n">rd_train</span><span class="p">)</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
-        <span class="n">score</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">feat</span><span class="p">,</span> <span class="n">regressor</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)))</span>     
+        <span class="n">score</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">regressor</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">))</span>     
     <span class="k">return</span> <span class="n">score</span>
 
-<span class="n">raw_score</span> <span class="o">=</span> <span class="n">internal_reg</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">raw_score</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+    <span class="n">raw_score</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">internal_reg</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">rd_split</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">rd_train</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)))</span>
+<span class="n">raw_score</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">raw_score</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="k">print</span> 
+<span class="k">print</span> <span class="s1">&#39;reference :&#39;</span> 
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">])):</span>
+    <span class="k">print</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">%-20s</span><span class="s2">  </span><span class="si">%5.6f</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> <span class="n">raw_score</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
 </pre></div>
 
 </div>
@@ -568,6 +577,14 @@ div#notebook {
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>0.696313900473
+
+reference :
+Fresh                 -0.644840
+Milk                  0.164593
+Grocery               0.663734
+Frozen                -1.642828
+Detergents_Paper      0.702051
+Delicatessen          -2.670503
 </pre>
 </div>
 </div>
@@ -612,7 +629,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Produce a scatter matrix for each pair of features in the data</span>
@@ -2432,27 +2449,35 @@ Ny7+WPF7swAAAABJRU5ErkJggg==
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[20]:</div>
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Scale the data using the natural logarithm</span>
 <span class="c1"># TODO: Scale the sample data using the natural logarithm</span>
-<span class="n">log_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
-<span class="n">log_samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">samples</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+<span class="n">log_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="n">log_samples</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
 
 <span class="c1"># Produce a scatter matrix for each pair of newly-transformed features</span>
 <span class="n">pd</span><span class="o">.</span><span class="n">scatter_matrix</span><span class="p">(</span><span class="n">log_data</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.3</span><span class="p">,</span> <span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">14</span><span class="p">,</span><span class="mi">8</span><span class="p">),</span> <span class="n">diagonal</span> <span class="o">=</span> <span class="s1">&#39;kde&#39;</span><span class="p">);</span>
 
 <span class="c1"># calculate the log_score for every log feature and compare with raw features</span>
-<span class="n">log_score</span> <span class="o">=</span> <span class="n">internal_reg</span><span class="p">(</span><span class="n">log_data</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
-<span class="n">display</span><span class="p">(</span><span class="n">log_score</span><span class="p">)</span>
+<span class="n">log_score</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">100</span><span class="p">):</span>
+    <span class="n">log_score</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">internal_reg</span><span class="p">(</span><span class="n">log_data</span><span class="p">,</span> <span class="n">rd_split</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">rd_train</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)))</span>
+<span class="n">log_score</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">log_score</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
 
+<span class="k">print</span> 
+<span class="k">print</span> <span class="s1">&#39;reference :&#39;</span> 
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">])):</span>
+    <span class="k">print</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">%-20s</span><span class="s2">  </span><span class="si">%5.6f</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">],</span> <span class="n">log_score</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+    
+<span class="k">print</span>
 <span class="c1"># if a feature become more predictable from other features, print the score</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">raw_score</span><span class="p">)):</span>
-    <span class="k">if</span> <span class="n">raw_score</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">log_score</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">log_score</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">print</span> <span class="n">log_score</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">print</span> <span class="n">log_score</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">raw_score</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
-        <span class="k">print</span> <span class="n">log_score</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">raw_score</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">log_score</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">and</span> <span class="n">log_score</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s2">&quot;Worse:&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">print</span> <span class="p">(</span><span class="s2">&quot;difference: </span><span class="si">%.6f</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">log_score</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">raw_score</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+        <span class="k">print</span> <span class="p">(</span><span class="s2">&quot;log_score:  </span><span class="si">%.6f</span><span class="s2">&quot;</span> <span class="o">%</span><span class="p">(</span><span class="n">log_score</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
 </pre></div>
 
 </div>
@@ -2464,24 +2489,19 @@ Ny7+WPF7swAAAABJRU5ErkJggg==
 
 
 <div class="output_area"><div class="prompt"></div>
-
-
-<div class="output_text output_subarea ">
-<pre>[(&apos;Fresh&apos;, -0.5826302179776548),
- (&apos;Milk&apos;, 0.46441329624695149),
- (&apos;Grocery&apos;, 0.56116848471348257),
- (&apos;Frozen&apos;, -0.65354708371133219),
- (&apos;Detergents_Paper&apos;, 0.41100382057458951),
- (&apos;Delicatessen&apos;, -0.5806538700461843)]</pre>
-</div>
-
-</div>
-
-<div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Milk
-0.343671581248
-0.464413296247
+<pre>
+reference :
+Fresh                 -0.580646
+Milk                  0.277065
+Grocery               0.421865
+Frozen                -0.630127
+Detergents_Paper      0.392236
+Delicatessen          -0.682579
+
+Worse: Milk
+difference: 0.112472
+log_score:  0.277065
 </pre>
 </div>
 </div>
@@ -6207,7 +6227,7 @@ AAAASUVORK5CYII=
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Display the log-transformed sample data</span>
@@ -6298,7 +6318,7 @@ Once you have performed this implementation, the dataset will be stored in the v
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[23]:</div>
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># For each feature find the data points with extreme high or low values</span>
@@ -7038,7 +7058,7 @@ In this problem, I removed all the outliers because almost all of them are on th
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Apply PCA by fitting the good data with the same number of dimensions as features</span>
@@ -7450,9 +7470,17 @@ RU5ErkJggg==
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer:</strong></p>
 <ul>
-<li>0.7253 of the variance is explained in total by the first and second, 0.9280 of the variance is explained by the first four.</li>
-<li>The first component best represent the <strong><em>Detergents Paper</em></strong> which has <strong>a positive increase of about 0.8</strong>;<br \> the second the <strong><em>Frozen</em></strong> which has <strong>a positive increase of over 0.6</strong>, followed by <em>Fresh</em> which has a 0.6 positive increase;<br \> the third the <strong><em>Fresh</em></strong> which has <strong>a positive increase close to 0.8</strong>; <br \> the fourth the <strong><em>Frozen</em></strong> which has <strong>a positive increase over 0.75</strong>.</li>
-<li>In the first dimension, <em>Milk</em> and <em>Grocery</em> have good positive increase of about 0.4, and in the second dimension, <em>Delicatessen</em> also has a positive increase about 0.4. In the third dimension, <em>Delicatessen</em> has a negative increase of about 0.6, and the fourth dimension also see a 0.6 negative decrease on <em>Delicatessen</em>.</li>
+<li>0.7253 of the variance is explained in total by the first and second, 0.9280 of the variance is explained by the first four.
+<br \><br \></li>
+<li>Components Analysis: <br \><br \><ul>
+<li>The first principle component is mainly made up of <em>Detergents Paper</em> which has an large increase of about 0.8 as well as <em>Milk</em> and <em>Grocery</em> with a considerable contribution of about 0.4 respectively. And small decreases in Fresh and Frozen can be seen. This component can decribe <strong><em>household products or daily expendables</em></strong>. <br \> <br \></li>
+<li>In the second principle component, both <em>Frozen</em> and <em>Fresh</em> have an increase of 0.6 roughly and <em>Delicatessen</em> also takes a sizable weight of about 0.4. And a slightly decrease in <em>Detergents_Paper</em> can be seen. This component can represent the <strong><em>purchases on ingredients for cooking</em></strong>. <br \> <br \></li>
+<li>The third component is made up of a large increase of <em>Fresh</em> and a large decrease in <em>Delicatessen</em>, along with an increase of about 0.2 in <em>Detergents_Paper</em>  and decreases similiar in scale in <em>Frozen</em> and <em>Milk</em>. This component mainly mixes the purchases on product for cooking(focus on <em>Fresh</em>) and cleansing with positive and negative weights. Therefore it can describe the <strong><em>purchases for running restaurants excluding the fast food makers</em></strong>. <br \><br \></li>
+<li>The fourth component is similar to the third except it swaps the status of <em>Fresh</em> and <em>Frozen</em>, so similarly, this component can describe the <strong><em>purchases for running a fast food restaurant</em></strong>.
+<br \><br \>
+<strong><em>Note:</em></strong> "Fast Food Restaurant" is just a intuitive representive of the restaurants that prefer frozen product over fresh. </li>
+</ul>
+</li>
 </ul>
 
 </div>
@@ -7470,7 +7498,7 @@ RU5ErkJggg==
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[25]:</div>
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Display sample log-data after having a PCA transformation applied</span>
@@ -7558,7 +7586,7 @@ RU5ErkJggg==
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[26]:</div>
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Apply PCA by fitting the good data with only two dimensions</span>
@@ -7591,7 +7619,7 @@ RU5ErkJggg==
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[27]:</div>
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Display sample log-data after applying PCA transformation in two dimensions</span>
@@ -7720,7 +7748,7 @@ RU5ErkJggg==
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[28]:</div>
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Apply your clustering algorithm of choice to the reduced data </span>
@@ -7822,7 +7850,7 @@ RU5ErkJggg==
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[29]:</div>
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Display the results of the clustering from implementation</span>
@@ -8568,7 +8596,7 @@ ERERET0jBVBERERERPSMFEAREREREdEzUgBFRERERETP+C9rYl74gMWvSgAAAABJRU5ErkJggg==
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[30]:</div>
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Inverse transform the centers</span>
@@ -8658,9 +8686,9 @@ ERERET0jBVBERERERPSMFEAREREREdEzUgBFRERERETP+C9rYl74gMWvSgAAAABJRU5ErkJggg==
 <strong><em> Segment 0 : <strong><em>With Kitchen Activities</em></strong> </em></strong> <br \>
 <strong><em> Segment 1 : <strong><em>Retailer</em></strong> </em></strong></p>
 <ul>
-<li><p>Segment 1 is quite easy to identify. It should be common retailers like supermarket or daily necessities store because the cost of grocery, milk and detergents_paper are all about Q3 of the data set and surpasses those of segment 0 a lot. Moreover the expenses on frozen and delicatessen don't pull down the mean of the data set, which means this set of establishments are more agile in fitting people's need for different kinds of product.</p>
-</li>
 <li><p>Segment 0 can be identify as establishments that have kitchen activities such as restaurant. A obvious reason for that is the center has more expense on fresh and frozen than segment 1 and much less than segment 1 in grocery expense.</p>
+</li>
+<li><p>Segment 1 is quite easy to identify. It should be common retailers like supermarket or daily necessities store because the cost of grocery, milk and detergents_paper are all about Q3 of the data set and surpasses those of segment 0 a lot. Moreover the expenses on frozen and delicatessen are not far away from the median of the data set, which means this set of establishments are more agile in fitting people's need for different kinds of product.</p>
 </li>
 </ul>
 
@@ -8680,10 +8708,12 @@ ERERET0jBVBERERERPSMFEAREREREdEzUgBFRERERETP+C9rYl74gMWvSgAAAABJRU5ErkJggg==
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[31]:</div>
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Display the predictions</span>
+<div class=" highlight hl-ipython2"><pre><span></span><span class="n">display</span><span class="p">(</span><span class="n">true_centers</span><span class="p">)</span>
+<span class="n">display</span><span class="p">(</span><span class="n">samples</span><span class="p">)</span>
+<span class="c1"># Display the predictions</span>
 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">pred</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sample_preds</span><span class="p">):</span>
     <span class="k">print</span> <span class="s2">&quot;Sample point&quot;</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="s2">&quot;predicted to be in Cluster&quot;</span><span class="p">,</span> <span class="n">pred</span>
 </pre></div>
@@ -8695,6 +8725,99 @@ ERERET0jBVBERERERPSMFEAREREREdEzUgBFRERERETP+C9rYl74gMWvSgAAAABJRU5ErkJggg==
 <div class="output_wrapper">
 <div class="output">
 
+
+<div class="output_area"><div class="prompt"></div>
+
+<div class="output_html rendered_html output_subarea ">
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Fresh</th>
+      <th>Milk</th>
+      <th>Grocery</th>
+      <th>Frozen</th>
+      <th>Detergents_Paper</th>
+      <th>Delicatessen</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Segment 0</th>
+      <td>8967.0</td>
+      <td>1920.0</td>
+      <td>2437.0</td>
+      <td>2081.0</td>
+      <td>309.0</td>
+      <td>741.0</td>
+    </tr>
+    <tr>
+      <th>Segment 1</th>
+      <td>6079.0</td>
+      <td>7042.0</td>
+      <td>10241.0</td>
+      <td>1275.0</td>
+      <td>3546.0</td>
+      <td>1159.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+<div class="output_area"><div class="prompt"></div>
+
+<div class="output_html rendered_html output_subarea ">
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Fresh</th>
+      <th>Milk</th>
+      <th>Grocery</th>
+      <th>Frozen</th>
+      <th>Detergents_Paper</th>
+      <th>Delicatessen</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>24025</td>
+      <td>4332</td>
+      <td>4757</td>
+      <td>9510</td>
+      <td>1145</td>
+      <td>5864</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>834</td>
+      <td>11577</td>
+      <td>11522</td>
+      <td>275</td>
+      <td>4027</td>
+      <td>1856</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>759</td>
+      <td>18664</td>
+      <td>1660</td>
+      <td>6114</td>
+      <td>536</td>
+      <td>4100</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
@@ -8716,13 +8839,49 @@ Sample point 2 predicted to be in Cluster 0
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer:</strong></p>
 <ul>
-<li>predictions in question 1:<ul>
-<li>Sample 0: Restaurant, This should be in cluster 0.</li>
-<li>Sample 1: Basic Supermarket, This should be in cluster 1.</li>
-<li>Sample 2: Fast Food, this should be in cluster 0.</li>
+<li>Intuitive Assignments: <br \>
+Assignments based on the percentage cost for each category should make sense.
+Here is the closest percentile for each category for the two centers:</li>
 </ul>
-</li>
-<li>So prediction on sample 0 is not consitent with the intuition and it's the one on the upper near the ambiguous region. (peek by switching pca_samples and centers in the Cluster Visualization).  There are some reasons that can explain this. First, this point is near the boundary, so we can further discuss this point by applying different algorithms and tunning parameters or just see the resulting distribution from GMM. Second, retailers that specialize on selling meat and frozen product do exist.</li>
+<table>
+<thead><tr>
+<th style="text-align:center"></th>
+<th style="text-align:center"><strong>Fresh</strong></th>
+<th style="text-align:center"><strong>Milk</strong></th>
+<th style="text-align:center"><strong>Grocery</strong></th>
+<th style="text-align:center"><strong>Frozen</strong></th>
+<th style="text-align:center"><strong>Detergents_Paper</strong></th>
+<th style="text-align:center"><strong>Delicatessen</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><strong>Segment 0</strong></td>
+<td style="text-align:center">Q2</td>
+<td style="text-align:center">Q1</td>
+<td style="text-align:center">Q1</td>
+<td style="text-align:center">Q2</td>
+<td style="text-align:center">Q1</td>
+<td style="text-align:center">Q2</td>
+</tr>
+<tr>
+<td style="text-align:center"><strong>Segment 1</strong></td>
+<td style="text-align:center">Q2</td>
+<td style="text-align:center">Q3</td>
+<td style="text-align:center">Q3</td>
+<td style="text-align:center">Q2</td>
+<td style="text-align:center">Q3</td>
+<td style="text-align:center">Q2</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Sample 0</strong>: This sample pays more on <em>Fresh</em> and <em>Frozen</em> over other products, it's more similar to center 0 except its expense is much lager. So it seems segment 0 best represent this sample.</li>
+<li><strong>Sample 1</strong>: This sample pays more on <em>Milk</em>, <em>Grocery</em> and <em>Detergents_Paper</em> over other products, it's more similar to center 1 according to these three features. Moreover, it's close to center 1 in terms of these three categories. So segment 1 best represent  this sample. </li>
+<li><strong>Sample 2</strong>: This one is hard to assign, but since <em>Detergents_Paper</em> and <em>Grocery</em> together has a significant effect on the first dimension according to PCA and this sample is very close to center 0 in terms of these two categories, it seems assigning this point to segment 0 is a good choice.</li>
+</ul>
+<ul>
+<li>So only the prediction on sample 0 is not consitent with the intuition and this sample is the one on the upper within an ambiguous region. (peek by switching pca_samples and centers in the Cluster Visualization).  There are some reasons that can explain this. First, this point is near the boundary, so we can further discuss this point by applying different algorithms and tunning parameters or just see the resulting distribution from GMM. Second, retailers that specialize on selling fresh and frozen product do exist.</li>
 </ul>
 
 </div>
@@ -8801,7 +8960,7 @@ Sample point 2 predicted to be in Cluster 0
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[32]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Display the clustering results based on &#39;Channel&#39; data</span>
